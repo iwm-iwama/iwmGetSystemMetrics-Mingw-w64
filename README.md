@@ -4,7 +4,8 @@
 
 【このプログラムについて】
 
-	DOSプロンプトでWin32APIのGetSystemMetrics関数を実行（指定したシステムメトリックまたはシステム構成設定を取得）するコマンドです。
+	DOSプロンプトでWin32APIのGetSystemMetrics関数を実行し、
+	指定したシステムメトリックまたはシステム構成設定を取得するコマンドです。
 
 	(例１) 全取得
 		iwmGetSystemMetrics.exe -all
