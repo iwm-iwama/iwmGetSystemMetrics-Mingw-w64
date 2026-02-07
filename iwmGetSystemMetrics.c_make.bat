@@ -46,7 +46,7 @@ set op_link=-Os -Wall -Wextra -lgdi32 -luser32 -lshlwapi
 	echo.
 	%fn_exe% -all
 	echo.
-	%fn_exe% -id=SM_CXFULLSCREEN,SM_CYFULLSCREEN,SM_CXSCREEN,SM_CYSCREEN,SM_CYMENU,SM_CLEANBOOT
+	%fn_exe% -key=SM_CXFULLSCREEN,SM_CYFULLSCREEN,SM_CXSCREEN,SM_CYSCREEN,SM_CYMENU,SM_CLEANBOOT
 
 :: Quit
 	echo.

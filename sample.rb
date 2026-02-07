@@ -2,17 +2,24 @@
 #coding:utf-8
 
 # https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-getsystemmetrics
-aSM = ["SM_CXSCREEN", "SM_CYSCREEN"]
-W, H = aSM
 
-hSM = {}
+# [KEY]を指定
+SM = <<EOD
+	SM_CXSCREEN
+	SM_CYSCREEN
+EOD
 
-%x(iwmGetSystemMetrics.exe -id=#{aSM.join(",")})
+Key = SM.strip.gsub("\n", ",").gsub(/\s*/, "")
+
+%x(iwmGetSystemMetrics.exe -key=#{Key})
 .each_line do |_s1|
 	_key, _value, _exp = _s1.strip.split("\t")
-	hSM[_key] = _value
+	# 存在チェック
+	if _value
+		# [KEY]を定数にして値を代入
+		eval "#{_key} = #{_value}"
+	end
 end
 
-p hSM
-print W, " = ", hSM[W], "\n"
-print H, " = ", hSM[H], "\n"
+print "SM_CXSCREEN", " = ", SM_CXSCREEN, "\n"
+print "SM_CYSCREEN", " = ", SM_CYSCREEN, "\n"

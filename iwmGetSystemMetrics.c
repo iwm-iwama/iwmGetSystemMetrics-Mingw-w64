@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 #define   IWM_COPYRIGHT       "(C)2026 iwm-iwama"
 #define   IWM_FILENAME        "iwmGetSystemMetrics"
-#define   IWM_UPDATE          "20260206"
+#define   IWM_UPDATE          "20260207"
 //------------------------------------------------------------------------------
 #include "lib_iwmutil2.h"
 
@@ -130,13 +130,13 @@ main()
 
 	for(UINT _u1 = 0; _u1 < $ARGC; _u1++)
 	{
-		// -id=
-		if((wp1 = iCLI_getOptValue(_u1, L"-id=", NULL)))
+		// -key=
+		if((wp1 = iCLI_getOptValue(_u1, L"-key=", NULL)))
 		{
-			WS **aw1 = iwsa_split(($ARGV[_u1] + 4), FALSE, 1, L",");
-				for(UINT _u2 = 0, _u3 = iwan_size(aw1); _u2 < _u3; _u2++)
+			WS **wa1 = iwsa_split(wp1, FALSE, 3, L",", L"\"", L"'");
+				for(UINT _u2 = 0, _u3 = iwan_size(wa1); _u2 < _u3; _u2++)
 				{
-					MS *ms1 = W2M(aw1[_u2]);
+					MS *ms1 = W2M(wa1[_u2]);
 						for(UINT _u4 = 0; SM[_u4]; _u4+=3)
 						{
 							if(! strcmp(SM[_u4 + 1], ms1))
@@ -150,7 +150,7 @@ main()
 						}
 					ifree(ms1);
 				}
-			ifree(aw1);
+			ifree(wa1);
 		}
 		// -a | -all
 		if(iCLI_getOptMatch(_u1, L"-a", L"-all"))
@@ -203,13 +203,13 @@ print_help()
 		"\033[5G"	IESC_STR1	IWM_FILENAME	IESC_OPT2	" [Option]"	"\n"
 		"\n"
 		"\033[2G"	IESC_LBL1	"(例)"	"\n"
-		"\033[5G"	IESC_STR1	IWM_FILENAME	IESC_OPT2	" -id=SM_CXSCREEN,SM_CYSCREEN"	"\n"
+		"\033[5G"	IESC_STR1	IWM_FILENAME	IESC_OPT2	" -key=SM_CXSCREEN,SM_CYSCREEN"	"\n"
 		"\n"
 		"\033[2G"	IESC_OPT2	"[Option]"	"\n"
 		"\033[5G"	IESC_OPT21	"-all | -a"	"\n"
 		"\033[9G"	IESC_STR1	"全情報出力"	"\n"
 		"\n"
-		"\033[5G"	IESC_OPT21	"-id=Key1,Key2,..."	"\n"
+		"\033[5G"	IESC_OPT21	"-key=Key1,Key2,..."	"\n"
 		"\033[9G"	IESC_LBL2	"[Key]"	IESC_STR1	" 情報出力"	"\n"
 		"\n"
 		"\033[2G"	IESC_LBL2	"[Key]"	IESC_STR2	"\n"
