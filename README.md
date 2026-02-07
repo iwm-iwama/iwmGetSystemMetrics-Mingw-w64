@@ -11,4 +11,4 @@
 		iwmGetSystemMetrics.exe -all
 
 	(例２) 指定して取得
-		iwmGetSystemMetrics.exe -id=SM_CXSCREEN,SM_CYSCREEN
+		iwmGetSystemMetrics.exe -key=SM_CXSCREEN,SM_CYSCREEN
