@@ -1,13 +1,13 @@
 //------------------------------------------------------------------------------
-#define   IWM_COPYRIGHT       "(C)2026 iwm-iwama"
-#define   IWM_FILENAME        "iwmGetSystemMetrics"
-#define   IWM_UPDATE          "20260207"
+#define IWM_COPYRIGHT "(C)2026 iwm-iwama"
+#define IWM_FILENAME "iwmGetSystemMetrics"
+#define IWM_UPDATE "20260618"
 //------------------------------------------------------------------------------
 #include "lib_iwmutil2.h"
 
-INT       main();
-VOID      print_version();
-VOID      print_help();
+INT main();
+VOID print_version();
+VOID print_help();
 
 /*
 	GetSystemMetrics 関数
@@ -100,19 +100,17 @@ MS *SM[] = {
 	"45", "SM_CXEDGE", "3-D境界線の幅。このメトリックは、SM_CXBORDERに対応する3-Dです。",
 	"46", "SM_CYEDGE", "3-D境界線の高さ。",
 	"15", "SM_CYMENU", "1行のメニューバーの高さ。",
-	NULL, NULL, NULL
-};
+	NULL, NULL, NULL};
 
-INT
-main()
+INT main()
 {
 	// lib_iwmutil2 初期化
 	imain_begin();
 
-	///iCLI_VarList();
+	/// iCLI_VarList();
 
 	// -h | --help
-	if(! $ARGC || iCLI_getOptMatch(0, L"-h", L"--help"))
+	if (!$ARGC || iCLI_getOptMatch(0, L"-h", L"--help"))
 	{
 		print_version();
 		print_help();
@@ -120,7 +118,7 @@ main()
 	}
 
 	// -v | --version
-	if(iCLI_getOptMatch(0, L"-v", L"--version"))
+	if (iCLI_getOptMatch(0, L"-v", L"--version"))
 	{
 		print_version();
 		imain_end();
@@ -128,94 +126,97 @@ main()
 
 	WS *wp1 = 0;
 
-	for(UINT _u1 = 0; _u1 < $ARGC; _u1++)
+	for (UINT _u1 = 0; _u1 < $ARGC; _u1++)
 	{
 		// -key=
-		if((wp1 = iCLI_getOptValue(_u1, L"-key=", NULL)))
+		if ((wp1 = iCLI_getOptValue(_u1, L"-key=", NULL)))
 		{
 			WS **wa1 = iwsa_split(wp1, FALSE, 3, L",", L"\"", L"'");
-				for(UINT _u2 = 0, _u3 = iwan_size(wa1); _u2 < _u3; _u2++)
+			for (UINT _u2 = 0, _u3 = iwan_size(wa1); _u2 < _u3; _u2++)
+			{
+				MS *ms1 = W2M(wa1[_u2]);
+				for (UINT _u4 = 0; SM[_u4]; _u4 += 3)
 				{
-					MS *ms1 = W2M(wa1[_u2]);
-						for(UINT _u4 = 0; SM[_u4]; _u4+=3)
-						{
-							if(! strcmp(SM[_u4 + 1], ms1))
-							{
-								P("%s\t%d\t%s\n",
-									SM[_u4 + 1],
-									GetSystemMetrics(atoi(SM[_u4])),
-									SM[_u4 + 2]
-								);
-							}
-						}
-					ifree(ms1);
+					if (!strcmp(SM[_u4 + 1], ms1))
+					{
+						P("%s\t%d\t%s\n",
+						  SM[_u4 + 1],
+						  GetSystemMetrics(atoi(SM[_u4])),
+						  SM[_u4 + 2]);
+					}
 				}
+				ifree(ms1);
+			}
 			ifree(wa1);
 		}
 		// -a | -all
-		if(iCLI_getOptMatch(_u1, L"-a", L"-all"))
+		if (iCLI_getOptMatch(_u1, L"-a", L"-all"))
 		{
 			$struct_iVBM *iVBM = iVBM_alloc();
-				for(UINT _u2 = 0; SM[_u2]; _u2+=3)
-				{
-					// iVBM_push_sprintf(iVBM, "%s\t%d\t%s\n", ...) より約５％速い
-					iVBM_push2(iVBM, SM[_u2 + 1]);
-					iVBM_push(iVBM, "\t", 1);
-					iVBM_push_sprintf(iVBM, "%d", GetSystemMetrics(atoi(SM[_u2])));
-					iVBM_push(iVBM, "\t", 1);
-					iVBM_push2(iVBM, SM[_u2 + 2]);
-					iVBM_push(iVBM, "\n", 1);
-				}
-				P1(iVBM_getStr(iVBM));
+			for (UINT _u2 = 0; SM[_u2]; _u2 += 3)
+			{
+				// iVBM_push_sprintf(iVBM, "%s\t%d\t%s\n", ...) より約５％速い
+				iVBM_push2(iVBM, SM[_u2 + 1]);
+				iVBM_push(iVBM, "\t", 1);
+				iVBM_push_sprintf(iVBM, "%d", GetSystemMetrics(atoi(SM[_u2])));
+				iVBM_push(iVBM, "\t", 1);
+				iVBM_push2(iVBM, SM[_u2 + 2]);
+				iVBM_push(iVBM, "\n", 1);
+			}
+			P1(iVBM_getStr(iVBM));
 			iVBM_free(iVBM);
 		}
 	}
 
 	// 処理時間
-	///P("-- %.3fsec\n\n", iExecSec_next());
+	/// P("-- %.3fsec\n\n", iExecSec_next());
 
 	// Debug
-	///idebug_map(); ifree_all(); idebug_map();
+	/// idebug_map(NULL); ifree_all(); idebug_map(NULL);
 
 	// 最終処理
 	imain_end();
 }
 
-VOID
-print_version()
+VOID print_version()
 {
 	P1(IESC_STR2);
 	LN(60);
 	P1(
-		"\033[2G"	IWM_COPYRIGHT	"\n"
-		"\033[5G"	IWM_FILENAME	"_"	IWM_UPDATE	" + "	LIB_IWMUTIL_FILENAME	"\n"
-	);
+		"\033[2G" IWM_COPYRIGHT "\n"
+		"\033[5G" IWM_FILENAME "_" IWM_UPDATE " + " LIB_IWMUTIL_FILENAME "\n");
 	LN(60);
 	P1(IESC_RESET);
 }
 
-VOID
-print_help()
+VOID print_help()
 {
 	P1(
-		"\033[1G"	IESC_TITLE1 " サンプル "	IESC_RESET	"\n"
+		"\033[1G" IESC_TITLE1 " サンプル " IESC_RESET "\n"
 		"\n"
-		"\033[5G"	IESC_STR1	IWM_FILENAME	IESC_OPT2	" [Option]"	"\n"
+		"\033[5G" IESC_STR1 IWM_FILENAME IESC_OPT2 " [Option]"
 		"\n"
-		"\033[2G"	IESC_LBL1	"(例)"	"\n"
-		"\033[5G"	IESC_STR1	IWM_FILENAME	IESC_OPT2	" -key=SM_CXSCREEN,SM_CYSCREEN"	"\n"
 		"\n"
-		"\033[2G"	IESC_OPT2	"[Option]"	"\n"
-		"\033[5G"	IESC_OPT21	"-all | -a"	"\n"
-		"\033[9G"	IESC_STR1	"全情報出力"	"\n"
+		"\033[2G" IESC_LBL1 "(例)"
 		"\n"
-		"\033[5G"	IESC_OPT21	"-key=Key1,Key2,..."	"\n"
-		"\033[9G"	IESC_LBL2	"[Key]"	IESC_STR1	" 情報出力"	"\n"
+		"\033[5G" IESC_STR1 IWM_FILENAME IESC_OPT2 " -key=SM_CXSCREEN,SM_CYSCREEN"
 		"\n"
-		"\033[2G"	IESC_LBL2	"[Key]"	IESC_STR2	"\n"
-	);
+		"\n"
+		"\033[2G" IESC_OPT2 "[Option]"
+		"\n"
+		"\033[5G" IESC_OPT21 "-all | -a"
+		"\n"
+		"\033[9G" IESC_STR1 "全情報出力"
+		"\n"
+		"\n"
+		"\033[5G" IESC_OPT21 "-key=Key1,Key2,..."
+		"\n"
+		"\033[9G" IESC_LBL2 "[Key]" IESC_STR1 " 情報出力"
+		"\n"
+		"\n"
+		"\033[2G" IESC_LBL2 "[Key]" IESC_STR2 "\n");
 
-	for(UINT _u1 = 0; SM[_u1]; _u1+=3)
+	for (UINT _u1 = 0; SM[_u1]; _u1 += 3)
 	{
 		P1("\033[5G");
 		P1(SM[_u1 + 1]);
