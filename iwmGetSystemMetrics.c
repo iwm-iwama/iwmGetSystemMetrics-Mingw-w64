@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 #define IWM_COPYRIGHT "(C)2026 iwm-iwama"
 #define IWM_FILENAME "iwmGetSystemMetrics"
-#define IWM_UPDATE "20260618"
+#define IWM_UPDATE "20260716"
 //------------------------------------------------------------------------------
 #include "lib_iwmutil2.h"
 
@@ -147,7 +147,7 @@ INT main()
 				}
 				ifree(ms1);
 			}
-			ifree(wa1);
+			ifree2(wa1);
 		}
 		// -a | -all
 		if (iCLI_getOptMatch(_u1, L"-a", L"-all"))
@@ -172,7 +172,7 @@ INT main()
 	/// P("-- %.3fsec\n\n", iExecSec_next());
 
 	// Debug
-	/// idebug_map(NULL); ifree_all(); idebug_map(NULL);
+	///	idebug_map(NULL);
 
 	// 最終処理
 	imain_end();
